@@ -1,12 +1,8 @@
 <script setup>
-import { SearchIcon, TextAlignCenter } from 'lucide-vue-next'
+import { Ellipsis } from 'lucide-vue-next'
 
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from '@/components/ui/input-group'
+import HeaderTable from '@/components/HeaderTable.vue'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -15,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 const members = [
   {
@@ -27,20 +24,7 @@ const members = [
 </script>
 
 <template>
-  <header class="px-1.5 flex justify-between">
-    <div>Management Anggota</div>
-    <div>
-      <InputGroup>
-        <InputGroupInput placeholder="Search Anggota" />
-        <InputGroupAddon>
-          <SearchIcon />
-        </InputGroupAddon>
-        <InputGroupAddon align="inline-end">
-          <InputGroupButton><TextAlignCenter /></InputGroupButton>
-        </InputGroupAddon>
-      </InputGroup>
-    </div>
-  </header>
+  <HeaderTable title="Management Anggota" trigger-name="Tambah Anggota" />
   <main>
     <Table>
       <TableHeader>
@@ -61,7 +45,28 @@ const members = [
           <TableCell>{{ member.position }}</TableCell>
           <TableCell>{{ member.departement }}</TableCell>
           <TableCell class="text-right">
-            {{ member.departement }}
+            <Popover>
+              <PopoverTrigger as-child>
+                <Button variant="outline">
+                  <Ellipsis />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent class="w-auto bg-neutral-900">
+                <div class="grid gap-2">
+                  <Button
+                    variant="default"
+                    class="text-white capitalize text-left bg-neutral-900 cursor-pointer"
+                  >
+                    edit</Button
+                  >
+                  <Button
+                    variant="default"
+                    class="text-white capitalize text-left bg-neutral-900 cursor-pointer"
+                    >delete</Button
+                  >
+                </div>
+              </PopoverContent>
+            </Popover>
           </TableCell>
         </TableRow>
       </TableBody>

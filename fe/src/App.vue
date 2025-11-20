@@ -69,7 +69,7 @@ import {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem v-for="item in items" :key="item.title">
-                <SidebarMenuButton as-child>
+                <SidebarMenuButton as-child class="py-6 px-6 rounded-2xl">
                   <RouterLink :to="item.url">
                     <component :is="item.icon" />
                     <span>{{ item.title }}</span>

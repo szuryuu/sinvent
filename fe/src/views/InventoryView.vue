@@ -1,6 +1,7 @@
-<script setup></script>
+<script setup>
+import HeaderTable from '@/components/HeaderTable.vue'
+</script>
 
 <template>
-  <header>Judul</header>
-  <main>cobi</main>
+  <HeaderTable title="Data Inventaris" trigger-name="Tambah Data" />
 </template>
