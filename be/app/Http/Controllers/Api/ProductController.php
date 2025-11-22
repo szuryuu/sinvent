@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,6 +41,28 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        return new ProductResource(true, "Detail product data", $product);
+        return new ProductResource(true, "Detail product", $product);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            "name" => "required",
+            "type" => "required",
+            "specification" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $product = Product::find($id);
+        $product->update([
+            "name" => $request->name,
+            "type" => $request->type,
+            "specification" => $request->specification,
+        ]);
+
+        return new ProductResource(true, "Product changed", $product);
     }
 }

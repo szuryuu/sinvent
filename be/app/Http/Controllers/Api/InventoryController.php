@@ -36,12 +36,36 @@ class InventoryController extends Controller
             "status" => $request->status,
         ]);
 
-        return new InventoryResource(true, "Added to inventory", $inventory);
+        return new InventoryResource(true, "Inventory added", $inventory);
     }
 
     public function show($id)
     {
         $inventory = Inventory::find($id);
-        return new InventoryResource(true, "Detail inventory data", $inventory);
+        return new InventoryResource(true, "Detail inventory", $inventory);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            "product_id" => "required|exists:products,id",
+            "member_id" => "required|exists:members,id",
+            "serial_number" => "required|integer|min:1",
+            "status" => "required|in:baik,rusak,tidak dipakai,dilelang",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $inventory = Inventory::find($id);
+        $inventory->update([
+            "product_id" => $request->product_id,
+            "member_id" => $request->member_id,
+            "serial_number" => $request->serial_number,
+            "status" => $request->status,
+        ]);
+
+        return new InventoryResource(true, "Inventory changed", $inventory);
     }
 }

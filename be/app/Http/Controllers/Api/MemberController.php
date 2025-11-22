@@ -40,6 +40,28 @@ class MemberController extends Controller
     public function show($id)
     {
         $member = Member::find($id);
-        return new MemberResource(true, "Detail member data", $member);
+        return new MemberResource(true, "Detail member", $member);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            "name" => "required",
+            "position" => "required",
+            "department" => "required",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $member = Member::find($id);
+        $member->update([
+            "name" => $request->name,
+            "position" => $request->position,
+            "department" => $request->department,
+        ]);
+
+        return new MemberResource(true, "Member changed", $member);
     }
 }
