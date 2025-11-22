@@ -12,7 +12,9 @@ class InventoryController extends Controller
 {
     public function index()
     {
-        $inventories = Inventory::latest()->paginate(5);
+        $inventories = Inventory::with(["product", "member"])
+            ->latest()
+            ->paginate(5);
         return new InventoryResource(true, "List Inventories", $inventories);
     }
 

@@ -18,7 +18,7 @@ class Inventory extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function inventories()
+    public function member()
     {
         return $this->belongsTo(Member::class);
     }
