@@ -36,4 +36,10 @@ class MemberController extends Controller
 
         return new MemberResource(true, "Member added", $member);
     }
+
+    public function show($id)
+    {
+        $member = Member::find($id);
+        return new MemberResource(true, "Detail member data", $member);
+    }
 }

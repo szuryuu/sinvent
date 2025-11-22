@@ -38,4 +38,10 @@ class InventoryController extends Controller
 
         return new InventoryResource(true, "Added to inventory", $inventory);
     }
+
+    public function show($id)
+    {
+        $inventory = Inventory::find($id);
+        return new InventoryResource(true, "Detail inventory data", $inventory);
+    }
 }
