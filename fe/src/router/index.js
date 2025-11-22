@@ -8,6 +8,17 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
+      meta: {
+        layout: 'blank',
+      },
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/auth/LoginView.vue'),
+      meta: {
+        layout: 'blank',
+      },
     },
     {
       path: '/member',
@@ -18,6 +29,7 @@ const router = createRouter({
       component: () => import('../views/MemberView.vue'),
       meta: {
         requiresAuth: true,
+        layout: 'sidebar',
       },
     },
     {
@@ -26,6 +38,7 @@ const router = createRouter({
       component: () => import('../views/InventoryView.vue'),
       meta: {
         requiresAuth: true,
+        layout: 'sidebar',
       },
     },
     {
@@ -34,12 +47,8 @@ const router = createRouter({
       component: () => import('../views/AnalyticView.vue'),
       meta: {
         requiresAuth: true,
+        layout: 'sidebar',
       },
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/auth/LoginView.vue'),
     },
   ],
 })

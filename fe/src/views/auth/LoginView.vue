@@ -1,4 +1,5 @@
 <script setup>
+import { toast } from 'vue-sonner'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -19,7 +20,12 @@ import { Label } from '@/components/ui/label'
       <CardTitle>Login to your account</CardTitle>
       <CardDescription> Enter your email below to login to your account </CardDescription>
       <CardAction>
-        <Button variant="link"> Sign Up </Button>
+        <Button
+          variant="link"
+          @click="() => toast.warning('Belum bisa sir', { description: 'Tanya admin yah..' })"
+        >
+          Sign Up
+        </Button>
       </CardAction>
     </CardHeader>
     <CardContent>

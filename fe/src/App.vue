@@ -1,7 +1,15 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { computed } from 'vue'
 import { Home, ListChecks, UsersRound, ChartSpline } from 'lucide-vue-next'
+
+import 'vue-sonner/style.css'
+import { Toaster } from '@/components/ui/sonner'
+
+const route = useRoute()
+const showSidebar = computed(() => {
+  return route.meta.layout === 'sidebar'
+})
 
 // Menu items.
 const items = [
@@ -45,7 +53,7 @@ import {
 </script>
 
 <template>
-  <SidebarProvider>
+  <SidebarProvider v-if="showSidebar">
     <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
@@ -98,4 +106,10 @@ import {
       </div>
     </SidebarInset>
   </SidebarProvider>
+
+  <div v-else class="min-h-screen flex items-center justify-center bg-gray-50">
+    <RouterView />
+  </div>
+
+  <Toaster position="top-right" />
 </template>
