@@ -21,7 +21,16 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+
+function getCell(row, key) {
+  if (!key.includes('.')) return row[key]
+
+  return key.split('.').reduce((acc, part) => {
+    return acc?.[part] ?? null
+  }, row)
+}
 </script>
+
 <template>
   <Table>
     <TableHeader>
@@ -38,7 +47,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
         <TableCell class="font-medium">
           {{ index + 1 }}
         </TableCell>
-        <TableCell v-for="col in columns" :key="col.key">{{ row[col.key] }}</TableCell>
+        <TableCell v-for="col in columns" :key="col.key"> {{ getCell(row, col.key) }}</TableCell>
 
         <!-- Action -->
         <TableCell class="text-right">

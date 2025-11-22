@@ -8,10 +8,13 @@ const inventories = ref([])
 const loading = ref(true)
 
 const columns = [
-  { label: 'Product ID', key: 'product_id' },
-  { label: 'Member ID', key: 'member_id' },
+  { label: 'Barang', key: 'product.name' },
+  { label: 'Type', key: 'product.type' },
   { label: 'Serial Number', key: 'serial_number' },
+  { label: 'Spesifikasi', key: 'product.specification' },
   { label: 'Status', key: 'status' },
+  { label: 'Assign', key: 'member.name' },
+  { label: 'Department', key: 'member.department' },
 ]
 
 const loadInventory = async () => {
