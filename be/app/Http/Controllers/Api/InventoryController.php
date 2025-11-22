@@ -68,4 +68,11 @@ class InventoryController extends Controller
 
         return new InventoryResource(true, "Inventory changed", $inventory);
     }
+
+    public function destroy($id)
+    {
+        $inventory = Inventory::find($id);
+        $inventory->delete();
+        return new InventoryResource(true, "Inventory deleted", null);
+    }
 }

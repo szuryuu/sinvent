@@ -64,4 +64,11 @@ class MemberController extends Controller
 
         return new MemberResource(true, "Member changed", $member);
     }
+
+    public function destroy($id)
+    {
+        $member = Member::find($id);
+        $member->delete();
+        return new MemberResource(true, "Member deleted", null);
+    }
 }

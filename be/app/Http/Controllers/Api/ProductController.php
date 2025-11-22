@@ -65,4 +65,11 @@ class ProductController extends Controller
 
         return new ProductResource(true, "Product changed", $product);
     }
+
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+        return new ProductResource(true, "Product deleted", null);
+    }
 }
