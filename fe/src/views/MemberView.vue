@@ -1,7 +1,8 @@
 <script setup>
+import { onMounted, ref } from 'vue'
 import { Ellipsis } from 'lucide-vue-next'
 
-import HeaderTable from '@/components/HeaderTable.vue'
+import BaseHeader from '@/components/BaseHeader.vue'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -13,18 +14,27 @@ import {
 } from '@/components/ui/table'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
-const members = [
-  {
-    id: 'INV001',
-    name: 'Paid',
-    position: '$250.00',
-    departement: 'Credit Card',
-  },
-]
+import api from '@/lib/axios'
+
+const members = ref([])
+const loading = ref(true)
+
+const loadMembers = async () => {
+  try {
+    const res = await api.get('/members')
+    members.value = res.data.data.data
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  loadMembers()
+})
 </script>
 
 <template>
-  <HeaderTable title="Management Anggota" trigger-name="Tambah Anggota" />
+  <BaseHeader title="Management Anggota" trigger-name="Tambah Anggota" />
   <main>
     <Table>
       <TableHeader>
@@ -37,13 +47,13 @@ const members = [
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow v-for="member in members" :key="member.id">
+        <TableRow v-for="(member, index) in members" :key="member.id">
           <TableCell class="font-medium">
-            {{ member.id }}
+            {{ index + 1 }}
           </TableCell>
           <TableCell>{{ member.name }}</TableCell>
           <TableCell>{{ member.position }}</TableCell>
-          <TableCell>{{ member.departement }}</TableCell>
+          <TableCell>{{ member.department }}</TableCell>
           <TableCell class="text-right">
             <Popover>
               <PopoverTrigger as-child>

@@ -1,7 +1,7 @@
 <script setup>
-import HeaderTable from '@/components/HeaderTable.vue'
+import BaseHeader from '@/components/BaseHeader.vue'
 </script>
 
 <template>
-  <HeaderTable title="Data Inventaris" trigger-name="Tambah Data" />
+  <BaseHeader title="Data Inventaris" trigger-name="Tambah Data" />
 </template>
