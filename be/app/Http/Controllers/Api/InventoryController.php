@@ -21,7 +21,7 @@ class InventoryController extends Controller
         $validator = Validator::make($request->all(), [
             "product_id" => "required|exists:products,id",
             "member_id" => "required|exists:members,id",
-            "serial_number" => "required|integer",
+            "serial_number" => "required|integer|min:1",
             "status" => "required|in:baik,rusak,tidak dipakai,dilelang",
         ]);
 
