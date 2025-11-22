@@ -1,15 +1,20 @@
 <?php
 
 use App\Http\Controllers\Api\InventoryController;
+use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\MemberController;
 use App\Http\Controllers\Api\ProductController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\RegisterController;
 use Illuminate\Support\Facades\Route;
 
-Route::get("/user", function (Request $request) {
-    return $request->user();
-})->middleware("auth:sanctum");
+Route::post("/register", RegisterController::class);
+Route::post("/login", LoginController::class);
 
-Route::apiResource("/products", ProductController::class);
-Route::apiResource("/members", MemberController::class);
-Route::apiResource("/inventories", InventoryController::class);
+Route::middleware("auth:api")->group(function () {
+    Route::apiResource("/products", ProductController::class);
+    Route::apiResource("/members", MemberController::class);
+    Route::apiResource("/inventories", InventoryController::class);
+
+    Route::post("/logout", LogoutController::class);
+});
