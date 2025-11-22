@@ -1,5 +1,3 @@
 <script setup></script>
 
-<template>
-  <main>Coba</main>
-</template>
+<template>Login Dulu Sir</template>
