@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
 {
+    public function all()
+    {
+        $members = Member::all();
+        return new MemberResource(true, "All Members", $members);
+    }
+
     public function index(Request $request)
     {
         $per_page = $request->get("per_page", 5);

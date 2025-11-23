@@ -5,12 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    public function all()
+    {
+        $products = Product::all();
+
+        return new ProductResource(true, "All Products", $products);
+    }
+
     public function index()
     {
         $products = Product::latest()->paginate(5);

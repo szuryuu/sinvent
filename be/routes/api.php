@@ -16,6 +16,9 @@ Route::middleware("auth:api")->group(function () {
         return $request->user();
     });
 
+    Route::get("/products/all", [ProductController::class, "all"]);
+    Route::get("/members/all", [MemberController::class, "all"]);
+
     Route::apiResource("/products", ProductController::class);
     Route::apiResource("/members", MemberController::class);
     Route::apiResource("/inventories", InventoryController::class);
