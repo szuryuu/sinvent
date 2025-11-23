@@ -1,5 +1,5 @@
 <script setup></script>
 
 <template>
-  <div>coba</div>
+  <div>...</div>
 </template>

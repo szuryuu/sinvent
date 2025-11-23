@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import BaseHeader from '@/components/BaseHeader.vue'
 import BaseTable from '@/components/BaseTable.vue'
+import BasePagination from '@/components/BasePagination.vue'
 import { toast } from 'vue-sonner'
 
 import api from '@/lib/axios'
@@ -101,4 +102,5 @@ onMounted(() => {
     @update="updateMembers"
     @delete="deleteMembers"
   />
+  <BasePagination />
 </template>

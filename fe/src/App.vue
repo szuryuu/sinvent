@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { ListChecks, UsersRound, ChartSpline } from 'lucide-vue-next'
 
 import 'vue-sonner/style.css'
@@ -45,6 +45,22 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from '@/components/ui/sidebar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
+const user = ref({
+  name: 'shadcn',
+  email: 'm@example.com',
+})
+
+const logout = () => {
+  localStorage.removeItem('token')
+  window.location.href = '/login'
+}
 </script>
 
 <template>
@@ -83,7 +99,26 @@ import {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger as-child>
+                <SidebarMenuButton size="lg">
+                  <img src="https://picsum.photos/200" class="w-8 h-8 rounded-lg" />
+                  <div class="grid flex-1 text-left leading-none">
+                    <span class="font-medium">{{ user.name }}</span>
+                    <span class="text-xs text-muted-foreground">{{ user.email }}</span>
+                  </div>
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem @click="logout"> Logout </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
     <SidebarInset>

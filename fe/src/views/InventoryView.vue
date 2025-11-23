@@ -1,6 +1,7 @@
 <script setup>
 import BaseHeader from '@/components/BaseHeader.vue'
 import BaseTable from '@/components/BaseTable.vue'
+import BasePagination from '@/components/BasePagination.vue'
 import { ref, onMounted, computed } from 'vue'
 import { toast } from 'vue-sonner'
 
@@ -229,4 +230,5 @@ onMounted(async () => {
     @update="updateInventories"
     @delete="deleteInventories"
   />
+  <BasePagination />
 </template>
