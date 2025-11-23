@@ -19,7 +19,29 @@ const columns = [
   { label: 'Department', key: 'member.department' },
 ]
 
-const loadInventory = async () => {
+const fields = [
+  { label: 'Inventaris ID', key: 'id', span: 2, readonly: true },
+  { label: 'Barang', key: 'product.name', span: 2 },
+  { label: 'Type', key: 'product.type', span: 2, readonly: true },
+  { label: 'Serial Number', key: 'serial_number', span: 2 },
+  { label: 'Spesifikasi', key: 'product.specification', span: 2, readonly: true },
+  {
+    label: 'Status',
+    key: 'status',
+    span: 2,
+    type: 'select',
+    options: [
+      { label: 'Baik', value: 'baik' },
+      { label: 'Rusak', value: 'rusak' },
+      { label: 'Dilelang', value: 'dilelang' },
+      { label: 'Tidak Dipakai', value: 'tidak dipakai' },
+    ],
+  },
+  { label: 'Assign', key: 'member.name', span: 1 },
+  { label: 'Department', key: 'member.department', span: 1, readonly: true },
+]
+
+const loadInventories = async () => {
   try {
     const res = await api.get('/inventories')
     inventories.value = res.data.data.data
@@ -29,18 +51,29 @@ const loadInventory = async () => {
   }
 }
 
+const updateInventories = async (updateData) => {
+  try {
+    await api.put(`/inventories/${updateData.id}`, updateData)
+    toast.success('sip')
+    await loadInventories()
+  } catch (err) {
+    toast.error('gagal')
+    console.log(err)
+  }
+}
+
 const deleteInventories = async (id) => {
   try {
     await api.delete(`/inventories/${id}`)
     toast.success('Hapus data berhasil')
-    loadInventory()
+    loadInventories()
   } catch (err) {
     console.log(err)
   }
 }
 
 onMounted(() => {
-  loadInventory()
+  loadInventories()
 })
 </script>
 
@@ -49,7 +82,9 @@ onMounted(() => {
   <BaseTable
     :columns="columns"
     :rows="inventories"
+    :field-edit="fields"
     item-delete="product.name"
+    @update="updateInventories"
     @delete="deleteInventories"
   />
 </template>

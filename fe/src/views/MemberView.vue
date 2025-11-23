@@ -16,8 +16,8 @@ const columns = [
 ]
 
 const fields = [
-  { label: 'Nama', key: 'name', defaultValue: 'Mas A', span: 2 },
-  { label: 'Jabatan', key: 'position', defaultValue: 'Programmer', span: 2 },
+  { label: 'Nama', key: 'name', span: 2 },
+  { label: 'Jabatan', key: 'position', span: 2 },
   {
     label: 'Department',
     key: 'department',

@@ -36,9 +36,18 @@ const emit = defineEmits(['update'])
 const formData = ref({})
 const isOpen = ref(false)
 
+function getNestedValue(obj, path) {
+  return path.split('.').reduce((acc, part) => acc?.[part], obj)
+}
+
 watch(isOpen, (newVal) => {
   if (newVal) {
     formData.value = JSON.parse(JSON.stringify(props.item))
+
+    props.fields.forEach((field) => {
+      const value = getNestedValue(props.item, field.key)
+      formData.value[field.key] = value ?? ''
+    })
   }
 })
 
@@ -59,14 +68,14 @@ const handleSubmit = () => {
       </Button>
     </DialogTrigger>
     <DialogContent
-      class="sm:max-w-[425px] rounded-4xl p-10 [&>button:last-child]:bg-neutral-300 [&>button:last-child]:p-2 [&>button:last-child]:rounded-lg [&>button:last-child]:cursor-pointer"
+      class="sm:max-w-[800px] rounded-4xl p-10 [&>button:last-child]:bg-neutral-300 [&>button:last-child]:p-2 [&>button:last-child]:rounded-lg [&>button:last-child]:cursor-pointer"
     >
       <DialogHeader>
         <DialogTitle>Edit Data</DialogTitle>
         <DialogDescription> Make sure everything looks right before saving. </DialogDescription>
       </DialogHeader>
       <form @submit.prevent="handleSubmit">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-4 pb-4">
           <div
             v-for="field in fields"
             :key="field.key"
@@ -77,6 +86,7 @@ const handleSubmit = () => {
                 v-if="field.type === 'select'"
                 :id="field.key"
                 :name="field.key"
+                :disable="field.readonly"
                 v-model="formData[field.key]"
               >
                 <SelectTrigger class="pt-10 pb-6 bg-slate-200 rounded-2xl w-full">
@@ -91,6 +101,7 @@ const handleSubmit = () => {
               <Input
                 v-else
                 v-model="formData[field.key]"
+                :disabled="field.readonly"
                 class="h-16 pt-6 bg-slate-200 rounded-2xl"
               />
               <Label
