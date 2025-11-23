@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
 {
+    public function all()
+    {
+        $inventories = Inventory::all();
+
+        return new InventoryResource(true, "All Inventory", $inventories);
+    }
+
     public function index(Request $request)
     {
         $per_page = $request->get("per_page", 5);
