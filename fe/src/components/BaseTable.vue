@@ -70,7 +70,7 @@ function getCell(row, key) {
             <PopoverContent class="w-auto bg-neutral-900">
               <div class="grid gap-2">
                 <BaseDelete
-                  :item="row[itemDelete]"
+                  :item="getCell(row, itemDelete)"
                   :purpose="deletePurpose"
                   @delete="emit('delete', row.id)"
                 />

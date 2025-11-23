@@ -2,6 +2,8 @@
 import BaseHeader from '@/components/BaseHeader.vue'
 import BaseTable from '@/components/BaseTable.vue'
 import { ref, onMounted } from 'vue'
+import { toast } from 'vue-sonner'
+
 import api from '@/lib/axios'
 
 const inventories = ref([])
@@ -27,6 +29,16 @@ const loadInventory = async () => {
   }
 }
 
+const deleteInventories = async (id) => {
+  try {
+    await api.delete(`/inventories/${id}`)
+    toast.success('Hapus data berhasil')
+    loadInventory()
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 onMounted(() => {
   loadInventory()
 })
@@ -34,5 +46,10 @@ onMounted(() => {
 
 <template>
   <BaseHeader title="Data Inventaris" trigger-name="Tambah Data" />
-  <BaseTable :columns="columns" :rows="inventories" />
+  <BaseTable
+    :columns="columns"
+    :rows="inventories"
+    item-delete="product.name"
+    @delete="deleteInventories"
+  />
 </template>
