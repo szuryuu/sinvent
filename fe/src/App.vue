@@ -6,6 +6,7 @@ import { ListChecks, UsersRound, ChartSpline, Moon, LogOut } from 'lucide-vue-ne
 import api from './lib/axios'
 
 import 'vue-sonner/style.css'
+import { toast } from 'vue-sonner'
 import { Toaster } from '@/components/ui/sonner'
 
 const route = useRoute()
@@ -69,6 +70,7 @@ const userLoad = async () => {
 const logout = () => {
   removeToken()
   router.push('/login')
+  toast.success('Logout berhasil')
 }
 
 onMounted(() => {
@@ -171,5 +173,5 @@ onMounted(() => {
     <RouterView />
   </div>
 
-  <Toaster position="top-right" />
+  <Toaster position="top-center" />
 </template>

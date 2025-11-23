@@ -94,8 +94,11 @@ const handleSubmit = () => {
       class="sm:max-w-[800px] rounded-4xl p-10 [&>button:last-child]:bg-neutral-300 [&>button:last-child]:p-2 [&>button:last-child]:rounded-lg [&>button:last-child]:cursor-pointer"
     >
       <DialogHeader>
-        <DialogTitle>Edit Data</DialogTitle>
-        <DialogDescription> Make sure everything looks right before saving. </DialogDescription>
+        <DialogTitle>{{ trigger }}</DialogTitle>
+        <DialogDescription
+          >Fill out the form below to add new data. Make sure everything looks right before
+          saving.</DialogDescription
+        >
       </DialogHeader>
       <form @submit.prevent="handleSubmit">
         <div class="grid grid-cols-2 gap-4 pb-4">

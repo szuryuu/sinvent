@@ -24,9 +24,7 @@ const router = createRouter({
     {
       path: '/member',
       name: 'member',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+      // lazy load
       component: () => import('../views/MemberView.vue'),
       meta: {
         requiresAuth: true,

@@ -140,7 +140,7 @@ const handleSubmit = () => {
           <DialogClose as-child>
             <Button variant="outline"> Cancel </Button>
           </DialogClose>
-          <Button type="submit"> Save changes </Button>
+          <Button type="submit" class="cursor-pointer"> Save changes </Button>
         </DialogFooter>
       </form>
     </DialogContent>

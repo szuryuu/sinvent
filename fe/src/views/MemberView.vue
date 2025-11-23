@@ -74,7 +74,7 @@ const postMembers = async (newData) => {
     toast.success('Data anggota berhasil ditambahkan')
     await loadMembers()
   } catch (err) {
-    toast.error('Gagal menambahkan data')
+    toast.error('Gagal menambahkan data', { description: 'Pastikan semua form sudah terisi' })
     console.log(err)
   }
 }
@@ -87,7 +87,7 @@ const updateMembers = async (updatedData) => {
 
     toast.success('Data anggota berhasil diupdate')
   } catch (err) {
-    toast.error('Gagal mengupdate data')
+    toast.error('Gagal mengupdate data', { description: 'Pastikan semua form sudah terisi' })
     console.log(err)
   }
 }

@@ -161,21 +161,21 @@ const loadInventories = async () => {
 
 const loadProducts = async () => {
   try {
-    const res = await api.get('/products')
+    const res = await api.get('/products/all')
     products.value = res.data.data.data || res.data.data
-    console.log('Products:', products.value)
   } catch (err) {
-    console.error('Gagal memuat data produk:', err)
+    toast.err('Gagal memuat data produk')
+    console.log('Gagal memuat data produk:', err)
   }
 }
 
 const loadMembers = async () => {
   try {
-    const res = await api.get('/members')
+    const res = await api.get('/members/all')
     members.value = res.data.data.data || res.data.data
-    console.log('Members:', members.value)
   } catch (err) {
-    console.error('Gagal memuat data member:', err)
+    toast.err('Gagal memuat data member')
+    console.log('Gagal memuat data member:', err)
   }
 }
 
@@ -189,11 +189,11 @@ const postInventories = async (newData) => {
     }
 
     await api.post('/inventories', payload)
-    toast.success('Berhasil tambah data inventaris')
     await loadInventories()
+    toast.success('Data inventaris berhasil ditambahkan')
   } catch (err) {
-    toast.error('Gagal tambah data inventaris')
-    console.error('Error detail:', err.response?.data)
+    toast.error('Gagal menambahkan data', { description: 'Pastikan semua form sudah terisi' })
+    console.log('Error detail:', err.response?.data)
   }
 }
 
@@ -206,23 +206,22 @@ const updateInventories = async (updateData) => {
       member_id: updateData.member_id,
     }
 
-    console.log('Sending payload:', payload)
-
     await api.put(`/inventories/${updateData.id}`, payload)
-    toast.success('Berhasil update data inventaris')
     await loadInventories()
+    toast.success('Data inventaris berhasil diupdate')
   } catch (err) {
-    toast.error('Gagal update data inventaris')
-    console.error('Error detail:', err.response?.data)
+    toast.error('Gagal mengupdate data', { description: 'Pastikan semua form sudah terisi' })
+    console.log('Error detail:', err.response?.data)
   }
 }
 
 const deleteInventories = async (id) => {
   try {
     await api.delete(`/inventories/${id}`)
-    toast.success('Hapus data berhasil')
     loadInventories()
+    toast.success('Data inventaris berhasil dihapus')
   } catch (err) {
+    toast.error('Gagal menghapus data')
     console.log(err)
   }
 }

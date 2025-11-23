@@ -15,7 +15,7 @@ import { Label } from '@/components/ui/label'
 
 import api from '@/lib/axios'
 import { setToken } from '@/lib/token'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -31,19 +31,14 @@ const handleSubmit = async () => {
   try {
     const res = await api.post('/login', payload.value)
     setToken(res.data.token)
-    toast.success(res)
-    console.log(res)
+
     router.push('/inventory')
+    toast.success('Login berhasil')
   } catch (err) {
-    toast.error(err)
-  } finally {
-    toast('ytta')
+    toast.error('Login gagal')
+    console.log(err)
   }
 }
-
-onMounted(() => {
-  console.log(payload.value)
-})
 </script>
 
 <template>
@@ -78,7 +73,7 @@ onMounted(() => {
       </form>
     </CardContent>
     <CardFooter class="flex flex-col gap-2">
-      <Button class="w-full" @click="handleSubmit"> Login </Button>
+      <Button class="w-full cursor-pointer" @click="handleSubmit"> Login </Button>
       <Button
         variant="outline"
         class="w-full"
