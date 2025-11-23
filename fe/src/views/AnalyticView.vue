@@ -1,7 +1,7 @@
 <script setup>
 import BaseCard from '@/components/BaseCard.vue'
 import BaseChart from '@/components/BaseChart.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import api from '@/lib/axios'
 import { toast } from 'vue-sonner'
 
@@ -11,6 +11,19 @@ const stats = ref({
   dilelang: 0,
   'tidak dipakai': 0,
   total: 0,
+})
+
+const statsObject = computed(() => {
+  if (Array.isArray(stats.value)) {
+    return {
+      baik: 0,
+      rusak: 0,
+      dilelang: 0,
+      'tidak dipakai': 0,
+      total: 0,
+    }
+  }
+  return stats.value
 })
 
 const loadAnalytics = async () => {
@@ -27,8 +40,9 @@ const loadAnalytics = async () => {
     }
 
     inventories.forEach((item) => {
-      if (Object.hasOwn(statusCount, item.status)) {
-        statusCount[item.status]++
+      const status = item?.status
+      if (status && Object.hasOwn(statusCount, status)) {
+        statusCount[status]++
       }
     })
 
@@ -58,7 +72,7 @@ onMounted(() => {
       <BaseCard icon="CircleX" title="Tidak Dipakai" :value="stats['tidak dipakai']" />
     </div>
     <div class="flex-1">
-      <BaseChart :stats="stats" />
+      <BaseChart :stats="statsObject" />
     </div>
   </div>
 </template>

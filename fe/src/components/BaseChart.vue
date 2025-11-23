@@ -44,7 +44,8 @@ const chartOptions = ref({
   maintainAspectRatio: false,
   scales: {
     y: {
-      max: 8,
+      beginAtZero: true,
+      suggestedMax: 8,
     },
   },
 })
@@ -53,14 +54,16 @@ watch(
   () => props.stats,
   (newStats) => {
     chartData.value.datasets[0].data = [
-      newStats.baik,
-      newStats.rusak,
-      newStats.dilelang,
-      newStats['tidak dipakai'],
+      newStats.baik ?? 0,
+      newStats.rusak ?? 0,
+      newStats.dilelang ?? 0,
+      newStats['tidak dipakai'] ?? 0,
     ]
   },
   { deep: true, immediate: true },
 )
+
+console.log(props.stats)
 </script>
 
 <template>
