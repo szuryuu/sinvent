@@ -1,12 +1,16 @@
 <script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-import { computed, ref } from 'vue'
-import { ListChecks, UsersRound, ChartSpline } from 'lucide-vue-next'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
+import { removeToken } from './lib/token'
+import { ListChecks, UsersRound, ChartSpline, Moon, LogOut } from 'lucide-vue-next'
+import api from './lib/axios'
 
 import 'vue-sonner/style.css'
 import { Toaster } from '@/components/ui/sonner'
 
 const route = useRoute()
+const router = useRouter()
+
 const showSidebar = computed(() => {
   return route.meta.layout === 'sidebar'
 })
@@ -45,22 +49,31 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from '@/components/ui/sidebar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 
-const user = ref({
-  name: 'shadcn',
-  email: 'm@example.com',
-})
+const user = ref({})
+
+const isDark = ref(false)
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+  document.documentElement.classList.toggle('dark', isDark.value)
+}
+
+const userLoad = async () => {
+  const res = await api.get('/user')
+
+  user.value = res.data
+  console.log('data', res)
+}
 
 const logout = () => {
-  localStorage.removeItem('token')
-  window.location.href = '/login'
+  removeToken()
+  router.push('/login')
 }
+
+onMounted(() => {
+  userLoad()
+})
 </script>
 
 <template>
@@ -100,25 +113,42 @@ const logout = () => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger as-child>
-                <SidebarMenuButton size="lg">
-                  <img src="https://picsum.photos/200" class="w-8 h-8 rounded-lg" />
-                  <div class="grid flex-1 text-left leading-none">
-                    <span class="font-medium">{{ user.name }}</span>
-                    <span class="text-xs text-muted-foreground">{{ user.email }}</span>
-                  </div>
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem @click="logout"> Logout </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div class="p-4 rounded-xl border bg-white shadow-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <img
+              src="https://picsum.photos/200"
+              alt="avatar"
+              class="w-12 h-12 rounded-full object-cover"
+            />
+            <div class="flex flex-col">
+              <span class="font-semibold text-gray-800 capitalize">
+                {{ user.name }}
+              </span>
+              <span class="text-sm text-gray-500 lowercase">
+                {{ user.email }}
+              </span>
+            </div>
+          </div>
+
+          <hr class="my-3" />
+
+          <div class="flex items-center justify-between mb-3 cursor-pointer" @click="toggleTheme">
+            <div class="flex items-center gap-2">
+              <Moon class="w-4 h-4" />
+              <span>Dark Theme</span>
+            </div>
+            <Switch v-model="isDark" />
+          </div>
+
+          <hr class="my-3" />
+
+          <div class="flex items-center gap-2 text-red-600 cursor-pointer" @click="logout">
+            <LogOut class="w-4 h-4" />
+            <span>Logout</span>
+          </div>
+        </div>
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
     <SidebarInset>
