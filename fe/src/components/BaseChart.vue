@@ -25,8 +25,16 @@ const chartData = ref({
   datasets: [
     {
       label: 'Jumlah Barang',
-      data: [],
-      backgroundColor: ['#4F46E5', '#EF4444', '#F59E0B', '#6B7280'],
+      data: [0, 0, 0, 0],
+      backgroundColor: ['#7138E9'],
+
+      borderRadius: {
+        topLeft: 14,
+        topRight: 14,
+        bottomLeft: 0,
+        bottomRight: 0,
+      },
+      borderSkipped: 'bottom',
     },
   ],
 })
@@ -34,6 +42,11 @@ const chartData = ref({
 const chartOptions = ref({
   responsive: true,
   maintainAspectRatio: false,
+  scales: {
+    y: {
+      max: 8,
+    },
+  },
 })
 
 watch(

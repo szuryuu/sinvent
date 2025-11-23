@@ -50,13 +50,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex gap-12 w-full">
-    <BaseCard icon="ClipboardCheck" title="Barang Baik" :value="stats.baik" />
-    <BaseCard icon="TriangleAlert" title="Barang Rusak" :value="stats.rusak" />
-    <BaseCard icon="Tag" title="Dilelang" :value="stats.dilelang" />
-    <BaseCard icon="CircleX" title="Tidak Dipakai" :value="stats['tidak dipakai']" />
-  </div>
-  <div class="h-auto">
-    <BaseChart :stats="stats" />
+  <div class="flex flex-col h-full">
+    <div class="flex gap-12 w-full">
+      <BaseCard icon="ClipboardCheck" title="Barang Baik" :value="stats.baik" />
+      <BaseCard icon="TriangleAlert" title="Barang Rusak" :value="stats.rusak" />
+      <BaseCard icon="Tag" title="Dilelang" :value="stats.dilelang" />
+      <BaseCard icon="CircleX" title="Tidak Dipakai" :value="stats['tidak dipakai']" />
+    </div>
+    <div class="flex-1">
+      <BaseChart :stats="stats" />
+    </div>
   </div>
 </template>
