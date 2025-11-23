@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { computed } from 'vue'
-import { Home, ListChecks, UsersRound, ChartSpline } from 'lucide-vue-next'
+import { ListChecks, UsersRound, ChartSpline } from 'lucide-vue-next'
 
 import 'vue-sonner/style.css'
 import { Toaster } from '@/components/ui/sonner'
