@@ -43,6 +43,22 @@ const loadMembers = async () => {
   }
 }
 
+const postMembers = async (newData) => {
+  try {
+    const payload = {
+      name: newData.name,
+      position: newData.position,
+      department: newData.department,
+    }
+
+    await api.post('/members', payload)
+    toast.success('Data anggota berhasil ditambahkan')
+    await loadMembers()
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 const updateMembers = async (updatedData) => {
   try {
     await api.put(`/members/${updatedData.id}`, updatedData)
@@ -70,7 +86,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <BaseHeader title="Management Anggota" trigger-name="Tambah Anggota" :fields="fields" />
+  <BaseHeader
+    title="Management Anggota"
+    trigger-name="Tambah Anggota"
+    :fields="fields"
+    @post="postMembers"
+  />
   <BaseTable
     :columns="columns"
     :rows="members"

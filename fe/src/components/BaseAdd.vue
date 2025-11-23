@@ -31,10 +31,6 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  item: {
-    type: Object,
-    required: true,
-  },
 })
 const emit = defineEmits(['post'])
 
@@ -45,16 +41,38 @@ function getNestedValue(obj, path) {
   return path.split('.').reduce((acc, part) => acc?.[part], obj)
 }
 
+function setNestedValue(obj, path, value) {
+  const keys = path.split('.')
+  const lastKey = keys.pop()
+  const target = keys.reduce((acc, key) => {
+    if (!acc[key]) acc[key] = {}
+    return acc[key]
+  }, obj)
+  target[lastKey] = value
+}
+
 watch(isOpen, (newVal) => {
   if (newVal) {
-    formData.value = JSON.parse(JSON.stringify(props.item))
+    formData.value = {}
 
     props.fields.forEach((field) => {
-      const value = getNestedValue(props.item, field.key)
-      formData.value[field.key] = value ?? ''
+      if (!field.readonly) {
+        setNestedValue(formData.value, field.key, field.defaultValue || '')
+      }
     })
   }
 })
+
+const handleFieldChange = (field, value) => {
+  setNestedValue(formData.value, field.key, value)
+
+  if (field.onChange) {
+    const selectedOption = field.options?.find((opt) => opt.value === value)
+    if (selectedOption) {
+      field.onChange(selectedOption, formData.value)
+    }
+  }
+}
 
 const handleSubmit = () => {
   emit('post', formData.value)
@@ -91,7 +109,8 @@ const handleSubmit = () => {
                 v-if="field.type === 'select'"
                 :id="field.key"
                 :name="field.key"
-                v-model="formData[field.key]"
+                :model-value="getNestedValue(formData, field.key)"
+                @update:model-value="(val) => handleFieldChange(field, val)"
               >
                 <SelectTrigger class="pt-10 pb-6 bg-slate-200 rounded-2xl w-full">
                   <SelectValue :placeholder="field.placeholder || 'Select...'" />
@@ -104,8 +123,9 @@ const handleSubmit = () => {
               </Select>
               <Input
                 v-else
-                v-model="formData[field.key]"
                 class="h-16 pt-6 bg-slate-200 rounded-2xl"
+                :model-value="getNestedValue(formData, field.key)"
+                @update:model-value="(val) => setNestedValue(formData, field.key, val)"
               />
               <Label
                 :for="field.key"

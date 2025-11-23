@@ -14,6 +14,8 @@ defineProps({
   },
 })
 
+const emit = defineEmits(['post'])
+
 import { SearchIcon, ListFilter } from 'lucide-vue-next'
 
 import BaseAdd from './BaseAdd.vue'
@@ -41,7 +43,7 @@ import {
         </InputGroupAddon>
       </InputGroup>
 
-      <BaseAdd :trigger="triggerName" :fields="fields" />
+      <BaseAdd :trigger="triggerName" :fields="fields" @post="(data) => emit('post', data)" />
     </div>
   </header>
 </template>

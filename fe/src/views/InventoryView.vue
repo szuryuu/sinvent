@@ -38,8 +38,21 @@ const memberOptions = computed(() =>
   })),
 )
 
-const fieldPost = [
-  { label: 'Barang', key: 'product.name', span: 2 },
+const fieldAdd = computed(() => [
+  {
+    label: 'Barang',
+    key: 'product_id',
+    span: 2,
+    type: 'select',
+    options: productOptions.value,
+    onChange: (selectedOption, formData) => {
+      formData.product = {
+        name: selectedOption.data.name,
+        type: selectedOption.data.type,
+        specification: selectedOption.data.specification,
+      }
+    },
+  },
   { label: 'Type', key: 'product.type', span: 2, readonly: true },
   { label: 'Serial Number', key: 'serial_number', span: 2 },
   { label: 'Spesifikasi', key: 'product.specification', span: 2, readonly: true },
@@ -55,9 +68,21 @@ const fieldPost = [
       { label: 'Tidak Dipakai', value: 'tidak dipakai' },
     ],
   },
-  { label: 'Assign', key: 'member.name', span: 1 },
+  {
+    label: 'Assign',
+    key: 'member_id',
+    span: 1,
+    type: 'select',
+    options: memberOptions.value,
+    onChange: (selectedOption, formData) => {
+      formData.member = {
+        name: selectedOption.data.name,
+        department: selectedOption.data.department,
+      }
+    },
+  },
   { label: 'Department', key: 'member.department', span: 1, readonly: true },
-]
+])
 
 const fields = computed(() => [
   { label: 'Inventaris ID', key: 'id', span: 2, readonly: true },
@@ -136,6 +161,24 @@ const loadMembers = async () => {
   }
 }
 
+const postInventories = async (newData) => {
+  try {
+    const payload = {
+      product_id: newData.product_id,
+      serial_number: newData.serial_number,
+      status: newData.status,
+      member_id: newData.member_id,
+    }
+
+    await api.post('/inventories', payload)
+    toast.success('Berhasil tambah data inventaris')
+    await loadInventories()
+  } catch (err) {
+    toast.error('Gagal tambah data inventaris')
+    console.error('Error detail:', err.response?.data)
+  }
+}
+
 const updateInventories = async (updateData) => {
   try {
     const payload = {
@@ -172,7 +215,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <BaseHeader title="Data Inventaris" trigger-name="Tambah Data" :fields="fieldPost" />
+  <BaseHeader
+    title="Data Inventaris"
+    trigger-name="Tambah Data"
+    :fields="fieldAdd"
+    @post="postInventories"
+  />
   <BaseTable
     :columns="columns"
     :rows="inventories"
