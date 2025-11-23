@@ -96,7 +96,7 @@ function getCell(row, key) {
         <TableCell class="text-right">
           <Popover>
             <PopoverTrigger as-child>
-              <Button variant="outline">
+              <Button variant="outline" class="cursor-pointer">
                 <Ellipsis />
               </Button>
             </PopoverTrigger>

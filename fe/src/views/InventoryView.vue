@@ -2,7 +2,7 @@
 import BaseHeader from '@/components/BaseHeader.vue'
 import BaseTable from '@/components/BaseTable.vue'
 import BasePagination from '@/components/BasePagination.vue'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { toast } from 'vue-sonner'
 
 import api from '@/lib/axios'
@@ -10,10 +10,17 @@ import api from '@/lib/axios'
 const inventories = ref([])
 const products = ref([])
 const members = ref([])
-const loading = ref(true)
+
+const currentPage = ref(1)
+const perPage = ref(5)
+const total = ref(0)
+const from = ref(0)
+const to = ref(0)
+
+const searchQuery = ref('')
 
 const columns = [
-  { label: 'Inventaris ID', key: 'id' },
+  { label: 'Inventaris ID', key: 'inv_code' },
   { label: 'Barang', key: 'product.name' },
   { label: 'Type', key: 'product.type' },
   { label: 'Serial Number', key: 'serial_number' },
@@ -134,11 +141,21 @@ const fields = computed(() => [
 
 const loadInventories = async () => {
   try {
-    const res = await api.get('/inventories')
+    const res = await api.get('/inventories', {
+      params: {
+        page: currentPage.value,
+        per_page: perPage.value,
+        search: searchQuery.value,
+      },
+    })
+
     inventories.value = res.data.data.data
-    console.log('data:', inventories)
-  } finally {
-    loading.value = true
+    total.value = res.data.data.total
+    from.value = res.data.data.from
+    to.value = res.data.data.to
+    currentPage.value = res.data.data.current_page
+  } catch (err) {
+    console.log(err)
   }
 }
 
@@ -210,6 +227,19 @@ const deleteInventories = async (id) => {
   }
 }
 
+const handleSearch = (query) => {
+  searchQuery.value = query
+  currentPage.value = 1
+}
+
+watch([currentPage, perPage], () => {
+  loadInventories()
+})
+
+watch(searchQuery, () => {
+  loadInventories()
+})
+
 onMounted(async () => {
   await Promise.all([loadInventories(), loadProducts(), loadMembers()])
 })
@@ -221,6 +251,7 @@ onMounted(async () => {
     trigger-name="Tambah Data"
     :fields="fieldAdd"
     @post="postInventories"
+    @search="handleSearch"
   />
   <BaseTable
     :columns="columns"
@@ -230,5 +261,13 @@ onMounted(async () => {
     @update="updateInventories"
     @delete="deleteInventories"
   />
-  <BasePagination />
+  <BasePagination
+    :current-page="currentPage"
+    :per-page="perPage"
+    :total="total"
+    :from="from"
+    :to="to"
+    @update:current-page="(page) => (currentPage = page)"
+    @update:per-page="(size) => (perPage = size)"
+  />
 </template>

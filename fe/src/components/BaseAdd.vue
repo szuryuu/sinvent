@@ -109,6 +109,7 @@ const handleSubmit = () => {
                 v-if="field.type === 'select'"
                 :id="field.key"
                 :name="field.key"
+                :disabled="field.readonly"
                 :model-value="getNestedValue(formData, field.key)"
                 @update:model-value="(val) => handleFieldChange(field, val)"
               >
@@ -124,6 +125,7 @@ const handleSubmit = () => {
               <Input
                 v-else
                 class="h-16 pt-6 bg-slate-200 rounded-2xl"
+                :disabled="field.readonly"
                 :model-value="getNestedValue(formData, field.key)"
                 @update:model-value="(val) => setNestedValue(formData, field.key, val)"
               />
@@ -140,7 +142,7 @@ const handleSubmit = () => {
           <DialogClose as-child>
             <Button variant="outline"> Cancel </Button>
           </DialogClose>
-          <Button type="submit"> Save changes </Button>
+          <Button type="submit" class="cursor-pointer"> Save changes </Button>
         </DialogFooter>
       </form>
     </DialogContent>

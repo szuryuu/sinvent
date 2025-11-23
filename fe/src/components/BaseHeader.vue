@@ -1,4 +1,16 @@
 <script setup>
+import { ref, watch } from 'vue'
+import { SearchIcon, ListFilter } from 'lucide-vue-next'
+import { debounce } from 'lodash'
+
+import BaseAdd from './BaseAdd.vue'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/components/ui/input-group'
+
 defineProps({
   title: {
     type: String,
@@ -14,17 +26,16 @@ defineProps({
   },
 })
 
-const emit = defineEmits(['post'])
+const emit = defineEmits(['post', 'search'])
+const searchQuery = ref('')
 
-import { SearchIcon, ListFilter } from 'lucide-vue-next'
+const debounceSearch = debounce((value) => {
+  emit('search', value)
+}, 500)
 
-import BaseAdd from './BaseAdd.vue'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from '@/components/ui/input-group'
+watch(searchQuery, (newValue) => {
+  debounceSearch(newValue)
+})
 </script>
 
 <template>
@@ -32,7 +43,7 @@ import {
     <h1 class="font-semibold">{{ title }}</h1>
     <div class="flex gap-2">
       <InputGroup class="bg-slate-200 py-6 px-2 rounded-2xl">
-        <InputGroupInput placeholder="Search Anggota" />
+        <InputGroupInput placeholder="Search Anggota" v-model="searchQuery" />
         <InputGroupAddon>
           <SearchIcon />
         </InputGroupAddon>
