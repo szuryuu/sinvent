@@ -13,9 +13,10 @@ class ProductResource extends JsonResource
 
     public function __construct($status, $message, $resource)
     {
-        return parent::__construct($resource);
         $this->status = $status;
         $this->message = $message;
+
+        parent::__construct($resource);
     }
 
     /**

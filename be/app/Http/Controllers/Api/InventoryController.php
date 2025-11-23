@@ -10,11 +10,20 @@ use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $inventories = Inventory::with(["product", "member"])
-            ->latest()
-            ->paginate(5);
+        $per_page = $request->get("per_page", 5);
+        $search = $request->get("search", "");
+
+        $query = Inventory::query()->with(["product", "member"]);
+
+        if ($query) {
+            $query->where(function ($q) use ($search) {
+                $q->where("serial_number", "like", "%{$search}%");
+            });
+        }
+
+        $inventories = $query->latest()->paginate($per_page);
         return new InventoryResource(true, "List Inventories", $inventories);
     }
 

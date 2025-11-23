@@ -20,7 +20,7 @@ return new class extends Migration {
                 ->foreignId("member_id")
                 ->constrained("members")
                 ->onDelete("cascade");
-            $table->integer("serial_number");
+            $table->integer("serial_number")->unique();
             $table->enum("status", [
                 "baik",
                 "rusak",

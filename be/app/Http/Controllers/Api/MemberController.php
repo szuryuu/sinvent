@@ -10,9 +10,20 @@ use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $members = Member::latest()->paginate(5);
+        $per_page = $request->get("per_page", 5);
+        $search = $request->get("search", "");
+
+        $query = Member::query();
+
+        if ($query) {
+            $query->where(function ($q) use ($search) {
+                $q->where("name", "like", "%{$search}%");
+            });
+        }
+
+        $members = $query->latest()->paginate($per_page);
         return new MemberResource(true, "List Member", $members);
     }
 
@@ -40,6 +51,17 @@ class MemberController extends Controller
     public function show($id)
     {
         $member = Member::find($id);
+
+        if (!$member) {
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Member not found",
+                ],
+                404,
+            );
+        }
+
         return new MemberResource(true, "Detail member", $member);
     }
 
@@ -56,6 +78,17 @@ class MemberController extends Controller
         }
 
         $member = Member::find($id);
+
+        if (!$member) {
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Member not found",
+                ],
+                404,
+            );
+        }
+
         $member->update([
             "name" => $request->name,
             "position" => $request->position,
@@ -68,6 +101,17 @@ class MemberController extends Controller
     public function destroy($id)
     {
         $member = Member::find($id);
+
+        if (!$member) {
+            return response()->json(
+                [
+                    "success" => false,
+                    "message" => "Member not found",
+                ],
+                404,
+            );
+        }
+
         $member->delete();
         return new MemberResource(true, "Member deleted", null);
     }
