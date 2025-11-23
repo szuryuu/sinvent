@@ -1,4 +1,5 @@
 <script setup>
+import { Plus } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -22,6 +23,10 @@ import {
 import { watch, ref } from 'vue'
 
 const props = defineProps({
+  trigger: {
+    type: String,
+    required: true,
+  },
   fields: {
     type: Array,
     required: true,
@@ -31,7 +36,7 @@ const props = defineProps({
     required: true,
   },
 })
-const emit = defineEmits(['update'])
+const emit = defineEmits(['post'])
 
 const formData = ref({})
 const isOpen = ref(false)
@@ -40,40 +45,19 @@ function getNestedValue(obj, path) {
   return path.split('.').reduce((acc, part) => acc?.[part], obj)
 }
 
-function setNestedValue(obj, path, value) {
-  const keys = path.split('.')
-  const lastKey = keys.pop()
-  const target = keys.reduce((acc, key) => {
-    if (!acc[key]) acc[key] = {}
-    return acc[key]
-  }, obj)
-  target[lastKey] = value
-}
-
 watch(isOpen, (newVal) => {
   if (newVal) {
     formData.value = JSON.parse(JSON.stringify(props.item))
 
     props.fields.forEach((field) => {
       const value = getNestedValue(props.item, field.key)
-      setNestedValue(formData.value, field.key, value ?? '')
+      formData.value[field.key] = value ?? ''
     })
   }
 })
 
-const handleFieldChange = (field, value) => {
-  setNestedValue(formData.value, field.key, value)
-
-  if (field.onChange) {
-    const selectedOption = field.options?.find((opt) => opt.value === value)
-    if (selectedOption) {
-      field.onChange(selectedOption, formData.value)
-    }
-  }
-}
-
 const handleSubmit = () => {
-  emit('update', formData.value)
+  emit('post', formData.value)
   isOpen.value = false
 }
 </script>
@@ -83,9 +67,9 @@ const handleSubmit = () => {
     <DialogTrigger as-child>
       <Button
         variant="default"
-        class="text-white capitalize text-left bg-neutral-900 cursor-pointer"
+        class="flex items-center justify-center py-6 px-8 rounded-2xl cursor-pointer"
       >
-        Edit
+        <Plus /> {{ trigger }}
       </Button>
     </DialogTrigger>
     <DialogContent
@@ -107,9 +91,7 @@ const handleSubmit = () => {
                 v-if="field.type === 'select'"
                 :id="field.key"
                 :name="field.key"
-                :disable="field.readonly"
-                :model-value="getNestedValue(formData, field.key)"
-                @update:model-value="(val) => handleFieldChange(field, val)"
+                v-model="formData[field.key]"
               >
                 <SelectTrigger class="pt-10 pb-6 bg-slate-200 rounded-2xl w-full">
                   <SelectValue :placeholder="field.placeholder || 'Select...'" />
@@ -122,10 +104,8 @@ const handleSubmit = () => {
               </Select>
               <Input
                 v-else
-                :disabled="field.readonly"
+                v-model="formData[field.key]"
                 class="h-16 pt-6 bg-slate-200 rounded-2xl"
-                :model-value="getNestedValue(formData, field.key)"
-                @update:model-value="(val) => handleFieldChange(field, val)"
               />
               <Label
                 :for="field.key"
