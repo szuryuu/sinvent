@@ -9,6 +9,8 @@ import api from '@/lib/axios'
 const members = ref([])
 const loading = ref(true)
 
+const selectedItem = ref(null)
+
 const columns = [
   { label: 'Nama', key: 'name' },
   { label: 'Jabatan', key: 'position' },
@@ -16,9 +18,19 @@ const columns = [
 ]
 
 const fields = [
-  { label: 'Nama', key: 'name', placeholder: 'Mas A', span: 2 },
-  { label: 'Jabatan', key: 'position', placeholder: 'Programmer', span: 2 },
-  { label: 'Department', key: 'department', placeholder: 'IT', span: 2 },
+  { label: 'Nama', key: 'name', defaultValue: 'Mas A', span: 2 },
+  { label: 'Jabatan', key: 'position', defaultValue: 'Programmer', span: 2 },
+  {
+    label: 'Department',
+    key: 'department',
+    span: 2,
+    type: 'select',
+    options: [
+      { label: 'IT', value: 1 },
+      { label: 'HR', value: 2 },
+      { label: 'Finance', value: 3 },
+    ],
+  },
 ]
 
 const loadMembers = async () => {
@@ -27,6 +39,17 @@ const loadMembers = async () => {
     members.value = res.data.data.data
   } finally {
     loading.value = false
+  }
+}
+
+const updateMembers = async (updatedData) => {
+  try {
+    await api.put(`/members/${updatedData.id}`, updatedData)
+
+    toast.success('sukses')
+  } catch (err) {
+    toast.error('Gagal..')
+    console.log(err)
   }
 }
 
@@ -40,6 +63,10 @@ const deleteMembers = async (id) => {
   }
 }
 
+const handleUpdate = (updatedData) => {
+  updateMembers(updatedData)
+}
+
 onMounted(() => {
   loadMembers()
 })
@@ -50,6 +77,7 @@ onMounted(() => {
   <BaseTable
     :columns="columns"
     :rows="members"
+    :field-edit="fields"
     item-delete="name"
     delete-purpose="member"
     @delete="deleteMembers"

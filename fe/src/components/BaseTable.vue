@@ -1,5 +1,5 @@
 <script setup>
-const emit = defineEmits(['delete'])
+const emit = defineEmits(['delete', 'update'])
 
 defineProps({
   columns: {
@@ -17,10 +17,15 @@ defineProps({
   deletePurpose: {
     type: String,
   },
+  fieldEdit: {
+    type: Array,
+    required: true,
+  },
 })
 
 import { Ellipsis } from 'lucide-vue-next'
 import BaseDelete from './BaseDelete.vue'
+import BaseEdit from './BaseEdit.vue'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -67,24 +72,14 @@ function getCell(row, key) {
                 <Ellipsis />
               </Button>
             </PopoverTrigger>
-            <PopoverContent class="w-auto bg-neutral-900">
+            <PopoverContent class="w-auto bg-neutral-900 rounded-3xl p-2">
               <div class="grid gap-2">
+                <BaseEdit :fields="fieldEdit" />
                 <BaseDelete
                   :item="getCell(row, itemDelete)"
                   :purpose="deletePurpose"
                   @delete="emit('delete', row.id)"
                 />
-                <Button
-                  variant="default"
-                  class="text-white capitalize text-left bg-neutral-900 cursor-pointer"
-                >
-                  edit</Button
-                >
-                <Button
-                  variant="default"
-                  class="text-white capitalize text-left bg-neutral-900 cursor-pointer"
-                  >delete</Button
-                >
               </div>
             </PopoverContent>
           </Popover>

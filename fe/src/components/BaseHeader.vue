@@ -74,7 +74,7 @@ import { Label } from '@/components/ui/label'
                 :key="field.key"
                 :class="['grid gap-2', field.span === 2 ? 'sm:col-span-2' : 'sm:col-span-1']"
               >
-                <Label :for="field.name">{{ field.label }}</Label>
+                <Label :for="field.key">{{ field.label }}</Label>
                 <Input :id="field.key" :name="field.key" :placeholder="field.placeholder || ''" />
               </div>
             </div>
