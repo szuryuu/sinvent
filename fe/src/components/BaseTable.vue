@@ -1,4 +1,6 @@
 <script setup>
+const emit = defineEmits(['delete'])
+
 defineProps({
   columns: {
     type: Array,
@@ -8,9 +10,17 @@ defineProps({
     type: Array,
     required: true,
   },
+  itemDelete: {
+    type: String,
+    required: true,
+  },
+  deletePurpose: {
+    type: String,
+  },
 })
 
 import { Ellipsis } from 'lucide-vue-next'
+import BaseDelete from './BaseDelete.vue'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -59,6 +69,11 @@ function getCell(row, key) {
             </PopoverTrigger>
             <PopoverContent class="w-auto bg-neutral-900">
               <div class="grid gap-2">
+                <BaseDelete
+                  :item="row[itemDelete]"
+                  :purpose="deletePurpose"
+                  @delete="emit('delete', row.id)"
+                />
                 <Button
                   variant="default"
                   class="text-white capitalize text-left bg-neutral-900 cursor-pointer"
