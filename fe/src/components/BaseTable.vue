@@ -1,4 +1,18 @@
 <script setup>
+import { Ellipsis } from 'lucide-vue-next'
+import BaseDelete from './BaseDelete.vue'
+import BaseEdit from './BaseEdit.vue'
+import { Button } from '@/components/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+
 const emit = defineEmits(['delete', 'update'])
 
 defineProps({
@@ -22,20 +36,6 @@ defineProps({
     required: true,
   },
 })
-
-import { Ellipsis } from 'lucide-vue-next'
-import BaseDelete from './BaseDelete.vue'
-import BaseEdit from './BaseEdit.vue'
-import { Button } from '@/components/ui/button'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 function getCell(row, key) {
   if (!key.includes('.')) return row[key]
@@ -74,7 +74,11 @@ function getCell(row, key) {
             </PopoverTrigger>
             <PopoverContent class="w-auto bg-neutral-900 rounded-3xl p-2">
               <div class="grid gap-2">
-                <BaseEdit :fields="fieldEdit" />
+                <BaseEdit
+                  :fields="fieldEdit"
+                  :item="row"
+                  @update="(data) => emit('update', data)"
+                />
                 <BaseDelete
                   :item="getCell(row, itemDelete)"
                   :purpose="deletePurpose"

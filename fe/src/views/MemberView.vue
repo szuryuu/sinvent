@@ -9,8 +9,6 @@ import api from '@/lib/axios'
 const members = ref([])
 const loading = ref(true)
 
-const selectedItem = ref(null)
-
 const columns = [
   { label: 'Nama', key: 'name' },
   { label: 'Jabatan', key: 'position' },
@@ -26,9 +24,9 @@ const fields = [
     span: 2,
     type: 'select',
     options: [
-      { label: 'IT', value: 1 },
-      { label: 'HR', value: 2 },
-      { label: 'Finance', value: 3 },
+      { label: 'IT', value: 'IT' },
+      { label: 'HR', value: 'HR' },
+      { label: 'Finance', value: 'Finance' },
     ],
   },
 ]
@@ -37,6 +35,9 @@ const loadMembers = async () => {
   try {
     const res = await api.get('/members')
     members.value = res.data.data.data
+  } catch (err) {
+    toast.error('gagal memuat')
+    console.log(err)
   } finally {
     loading.value = false
   }
@@ -45,8 +46,8 @@ const loadMembers = async () => {
 const updateMembers = async (updatedData) => {
   try {
     await api.put(`/members/${updatedData.id}`, updatedData)
-
     toast.success('sukses')
+    await loadMembers()
   } catch (err) {
     toast.error('Gagal..')
     console.log(err)
@@ -63,10 +64,6 @@ const deleteMembers = async (id) => {
   }
 }
 
-const handleUpdate = (updatedData) => {
-  updateMembers(updatedData)
-}
-
 onMounted(() => {
   loadMembers()
 })
@@ -80,6 +77,7 @@ onMounted(() => {
     :field-edit="fields"
     item-delete="name"
     delete-purpose="member"
+    @update="updateMembers"
     @delete="deleteMembers"
   />
 </template>

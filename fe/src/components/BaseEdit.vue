@@ -1,20 +1,4 @@
 <script setup>
-const props = defineProps({
-  fields: {
-    type: Array,
-    required: true,
-  },
-  item: {
-    type: Object,
-    required: true,
-  },
-  modelValue: {
-    type: Object,
-    default: () => ({}),
-  },
-})
-const emit = defineEmits(['update:modelValue'])
-
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -37,44 +21,51 @@ import {
 } from '@/components/ui/select'
 import { watch, ref } from 'vue'
 
-const formData = ref({ ...props.modelValue })
-
-;(watch(
-  () => props.modelValue,
-  (newVal) => {
-    formData.value = { ...newVal }
+const props = defineProps({
+  fields: {
+    type: Array,
+    required: true,
   },
-),
-  { deep: true })
+  item: {
+    type: Object,
+    required: true,
+  },
+})
+const emit = defineEmits(['update'])
 
-const updateValue = (key, value) => {
-  formData.value[key] = value
-  emit('update:modelValue', formData.value)
-}
+const formData = ref({})
+const isOpen = ref(false)
+
+watch(isOpen, (newVal) => {
+  if (newVal) {
+    formData.value = JSON.parse(JSON.stringify(props.item))
+  }
+})
 
 const handleSubmit = () => {
-  emit('update:modelValue', formData.value)
+  emit('update', formData.value)
+  isOpen.value = false
 }
 </script>
 
 <template>
-  <Dialog>
-    <form @submit.prevent="handleSubmit">
-      <DialogTrigger as-child>
-        <Button
-          variant="default"
-          class="text-white capitalize text-left bg-neutral-900 cursor-pointer"
-        >
-          Edit
-        </Button>
-      </DialogTrigger>
-      <DialogContent
-        class="sm:max-w-[425px] rounded-4xl p-10 [&>button:last-child]:bg-neutral-300 [&>button:last-child]:p-2 [&>button:last-child]:rounded-lg [&>button:last-child]:cursor-pointer"
+  <Dialog v-model:open="isOpen">
+    <DialogTrigger as-child>
+      <Button
+        variant="default"
+        class="text-white capitalize text-left bg-neutral-900 cursor-pointer"
       >
-        <DialogHeader>
-          <DialogTitle>Edit Data</DialogTitle>
-          <DialogDescription> Make sure everything looks right before saving. </DialogDescription>
-        </DialogHeader>
+        Edit
+      </Button>
+    </DialogTrigger>
+    <DialogContent
+      class="sm:max-w-[425px] rounded-4xl p-10 [&>button:last-child]:bg-neutral-300 [&>button:last-child]:p-2 [&>button:last-child]:rounded-lg [&>button:last-child]:cursor-pointer"
+    >
+      <DialogHeader>
+        <DialogTitle>Edit Data</DialogTitle>
+        <DialogDescription> Make sure everything looks right before saving. </DialogDescription>
+      </DialogHeader>
+      <form @submit.prevent="handleSubmit">
         <div class="grid grid-cols-2 gap-4">
           <div
             v-for="field in fields"
@@ -86,8 +77,7 @@ const handleSubmit = () => {
                 v-if="field.type === 'select'"
                 :id="field.key"
                 :name="field.key"
-                :model-value="formData[field.key]"
-                @update:model-value="updateValue(field.key, $event)"
+                v-model="formData[field.key]"
               >
                 <SelectTrigger class="pt-10 pb-6 bg-slate-200 rounded-2xl w-full">
                   <SelectValue :placeholder="field.placeholder || 'Select...'" />
@@ -100,11 +90,7 @@ const handleSubmit = () => {
               </Select>
               <Input
                 v-else
-                :id="field.key"
-                :name="field.key"
-                :default-value="field.defaultValue || ''"
-                :model-value="formData[field.key]"
-                @update:model-value="updateValue(field.key, $event)"
+                v-model="formData[field.key]"
                 class="h-16 pt-6 bg-slate-200 rounded-2xl"
               />
               <Label
@@ -122,7 +108,7 @@ const handleSubmit = () => {
           </DialogClose>
           <Button type="submit"> Save changes </Button>
         </DialogFooter>
-      </DialogContent>
-    </form>
+      </form>
+    </DialogContent>
   </Dialog>
 </template>
