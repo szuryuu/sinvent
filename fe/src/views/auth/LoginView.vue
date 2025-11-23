@@ -12,6 +12,38 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+
+import api from '@/lib/axios'
+import { setToken } from '@/lib/token'
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const email = ref('')
+const password = ref('')
+const payload = computed(() => ({
+  email: email.value,
+  password: password.value,
+}))
+
+const handleSubmit = async () => {
+  try {
+    const res = await api.post('/login', payload.value)
+    setToken(res.data.token)
+    toast.success(res)
+    console.log(res)
+    router.push('/inventory')
+  } catch (err) {
+    toast.error(err)
+  } finally {
+    toast('ytta')
+  }
+}
+
+onMounted(() => {
+  console.log(payload.value)
+})
 </script>
 
 <template>
@@ -33,21 +65,29 @@ import { Label } from '@/components/ui/label'
         <div class="grid w-full items-center gap-4">
           <div class="flex flex-col space-y-1.5">
             <Label for="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" />
+            <Input id="email" type="email" placeholder="m@example.com" v-model="email" />
           </div>
           <div class="flex flex-col space-y-1.5">
             <div class="flex items-center">
               <Label for="password">Password</Label>
               <a href="#" class="ml-auto inline-block text-sm underline"> Forgot your password? </a>
             </div>
-            <Input id="password" type="password" />
+            <Input id="password" type="password" v-model="password" />
           </div>
         </div>
       </form>
     </CardContent>
     <CardFooter class="flex flex-col gap-2">
-      <Button class="w-full"> Login </Button>
-      <Button variant="outline" class="w-full"> Login with Google </Button>
+      <Button class="w-full" @click="handleSubmit"> Login </Button>
+      <Button
+        variant="outline"
+        class="w-full"
+        @click="
+          () => toast.warning('Belum bisa sir', { description: 'Pake cara biasanya aja ya..' })
+        "
+      >
+        Login with Google
+      </Button>
     </CardFooter>
   </Card>
 </template>

@@ -14,11 +14,6 @@ const showSidebar = computed(() => {
 // Menu items.
 const items = [
   {
-    title: 'Home',
-    url: '/',
-    icon: Home,
-  },
-  {
     title: 'Data Inventaris',
     url: '/inventory',
     icon: ListChecks,

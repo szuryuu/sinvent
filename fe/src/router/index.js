@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import setupGuard from '@/lib/guard'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -52,5 +53,7 @@ const router = createRouter({
     },
   ],
 })
+
+setupGuard(router)
 
 export default router
