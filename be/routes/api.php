@@ -12,6 +12,10 @@ Route::post("/register", RegisterController::class);
 Route::post("/login", LoginController::class);
 
 Route::middleware("auth:api")->group(function () {
+    Route::get("/user", function (\Illuminate\Http\Request $request) {
+        return $request->user();
+    });
+
     Route::apiResource("/products", ProductController::class);
     Route::apiResource("/members", MemberController::class);
     Route::apiResource("/inventories", InventoryController::class);
