@@ -51,7 +51,7 @@ const loadAnalytics = async () => {
       total: inventories.length,
     }
 
-    console.log(res.data.data)
+    console.log('normal', stats.value)
   } catch (err) {
     toast.error('Gagal memuat data analytics')
     console.log(err)
