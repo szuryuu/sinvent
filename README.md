@@ -21,7 +21,7 @@ A modern, full-stack **Inventory Management System** built with **Laravel** (Bac
 ### Frontend
 - **Framework**: Vue 3
 - **Build Tool**: Vite
-- **UI Components**: **Shadcn UI** (powered by Reka UI)
+- **UI Components**: Shadcn Vue
 - **Styling**: Tailwind CSS 4
 - **HTTP Client**: Axios
 
