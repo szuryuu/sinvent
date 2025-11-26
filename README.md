@@ -15,7 +15,7 @@ A modern, full-stack **Inventory Management System** built with **Laravel** (Bac
 ### Backend
 - **Framework**: Laravel 12
 - **Language**: PHP 8.2+
-- **Authentication**: Laravel Sanctum & JWT-Auth
+- **Authentication**: JWT-Auth
 - **Database**: MySQL
 
 ### Frontend
