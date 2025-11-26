@@ -42,8 +42,7 @@ Navigate to the backend directory and install dependencies.
     php artisan key:generate
     ```
 
-5. **Generate JWT Secret:**  
-    Generate a JWT secret key:
+5. **Generate JWT Secret:**   
     ```bash
     php artisan jwt:secret
     ```
