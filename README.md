@@ -12,10 +12,20 @@ A modern, full-stack **Inventory Management System** built with **Laravel** (Bac
 
 ## Tech Stack
 
-- **Backend**: Laravel 12, PHP 8.2+
-- **Frontend**: Vue 3, Vite, Tailwind CSS
-- **Database**: MySQL (Default Laravel support)
-- **State Management & Tooling**: Pinia, Bun, ESLint, Prettier
+### Backend
+- **Framework**: Laravel 12
+- **Language**: PHP 8.2+
+- **Authentication**: Laravel Sanctum & JWT-Auth
+- **Database**: MySQL
+
+### Frontend
+- **Framework**: Vue 3
+- **Build Tool**: Vite
+- **UI Components**: **Shadcn UI** (powered by Reka UI)
+- **Styling**: Tailwind CSS 4
+- **HTTP Client**: Axios
+
+## How to Run
 
 ### Step 1: Backend Setup (Laravel)
 
